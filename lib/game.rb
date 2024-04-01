@@ -7,7 +7,7 @@ class Game
   def initialize
     @word = select_word
     @guesses = []
-    @correct_letters = Array.new(@word.length, '_').join('')
+    @correct_letters = '_' * @word.length
   end
 
   private
