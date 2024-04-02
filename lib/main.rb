@@ -3,5 +3,4 @@
 require_relative 'game'
 
 game = Game.new
-p game.word
-p game.correct_letters
+game.play

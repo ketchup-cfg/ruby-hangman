@@ -20,12 +20,32 @@ class Game
     !@correct_letters.include?('_')
   end
 
-  def guess(guess)
+  def add_guess(guess)
     (0...word.length).each do |i|
       correct_letters[i] = guess[i] if guess[i] == word[i]
     end
 
     @number_of_guesses += 1
+  end
+
+  def display_loop_prompt
+    puts "#{correct_letters} | #{guesses_left} guesses left"
+    print 'Please enter your guess: '
+  end
+
+  def play
+    until guesses_left.zero?
+      display_loop_prompt
+      guess = gets.chomp
+      add_guess(guess)
+
+      if won?
+        puts 'You won!'
+        break
+      end
+    end
+
+    puts "The word was #{word}"
   end
 
   private
