@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
+require_relative 'serializable'
+
 # The game state for Hangman
 class Game
+  include Serializable
+
   MAX_GUESSES = 11
 
   attr_reader :word, :number_of_guesses, :correct_letters
