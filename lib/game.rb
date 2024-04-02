@@ -4,16 +4,16 @@
 class Game
   MAX_GUESSES = 11
 
-  attr_reader :word, :guesses, :correct_letters
+  attr_reader :word, :number_of_guesses, :correct_letters
 
   def initialize
     @word = select_word
-    @guesses = []
+    @number_of_guesses = 0
     @correct_letters = '_' * @word.length
   end
 
   def guesses_left
-    MAX_GUESSES - @guesses.length
+    MAX_GUESSES - @number_of_guesses
   end
 
   def won?
@@ -25,7 +25,7 @@ class Game
       correct_letters[i] = guess[i] if guess[i] == word[i]
     end
 
-    guesses << guess
+    @number_of_guesses += 1
   end
 
   private
