@@ -8,19 +8,29 @@ class Game
 
   MAX_GUESSES = 11
 
-  attr_reader :word, :number_of_guesses, :correct_letters
+  attr_reader :paused, :word, :number_of_guesses, :correct_letters
 
   def initialize
+    @paused = false
     @word = select_word
     @number_of_guesses = 0
     @correct_letters = '_' * @word.length
   end
 
   def play
+    start_prompt
+
     until guesses_left.zero?
       display_loop_prompt
-      guess = gets.chomp.downcase
-      add_guess(guess)
+      input = gets.chomp.downcase
+
+      if input == '!'
+        save_game
+        @paused = true
+        break
+      else
+        add_guess(input)
+      end
 
       if won?
         puts 'You won!'
@@ -28,10 +38,43 @@ class Game
       end
     end
 
-    puts "The word was #{word}"
+    puts "The word was #{word}" unless paused
   end
 
   private
+
+  def start_prompt
+    return unless File.exist?('data.json')
+
+    loop do
+      puts 'Load previous game? (y)es or (no)?'
+      input = gets.chomp[0].downcase
+
+      case input
+      when 'y'
+        load_game
+        break
+      when 'n'
+        delete_game
+        break
+      else
+        puts 'invalid input'
+      end
+    end
+  end
+
+  def save_game
+    File.open('data.json', 'w') { |f| f.puts serialize }
+  end
+
+  def delete_game
+    File.delete('data.json')
+  end
+
+  def load_game
+    unserialize(File.read('data.json'))
+    delete_game
+  end
 
   def select_word
     File.readlines('google-10000-english-no-swears.txt')
@@ -43,7 +86,7 @@ class Game
 
   def display_loop_prompt
     puts "#{correct_letters} | #{guesses_left} guesses left"
-    print 'Please enter your guess: '
+    print 'Please enter your guess or enter ! to save and exit: '
   end
 
   def won?
