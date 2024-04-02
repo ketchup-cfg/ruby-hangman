@@ -36,7 +36,7 @@ class Game
   def play
     until guesses_left.zero?
       display_loop_prompt
-      guess = gets.chomp
+      guess = gets.chomp.downcase
       add_guess(guess)
 
       if won?
@@ -55,5 +55,6 @@ class Game
         .select { |line| line.chomp.length.between?(5, 12) }
         .sample
         .chomp
+        .downcase
   end
 end
