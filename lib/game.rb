@@ -44,7 +44,7 @@ class Game
   private
 
   def start_prompt
-    return unless File.exist?('data.json')
+    return unless File.exist?('data')
 
     loop do
       puts 'Load previous game? (y)es or (no)?'
@@ -64,15 +64,15 @@ class Game
   end
 
   def save_game
-    File.open('data.json', 'w') { |f| f.puts serialize }
+    File.open('data', 'w') { |f| f << serialize }
   end
 
   def delete_game
-    File.delete('data.json')
+    File.delete('data')
   end
 
   def load_game
-    unserialize(File.read('data.json'))
+    unserialize(File.read('data'))
     delete_game
   end
 
